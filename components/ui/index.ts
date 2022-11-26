@@ -1,2 +1,4 @@
 export * from './Nabvar';
-export * from './notFavorites';
+export * from './NotFavorites';
+
+

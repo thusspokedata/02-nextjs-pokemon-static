@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Button, Card, Container, Grid, Text, Image } from '@nextui-org/react';
 import { NextPage, GetStaticPaths, GetStaticProps } from 'next';
 
+import confetti from 'canvas-confetti'
+
 import { pokeApi } from '../../api';
 import { Layout } from '../../components';
 import { Pokemon } from '../../interfaces';
@@ -20,6 +22,18 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
   const onToggleFavorite = () => {
     localFavorites.toggleFavorite(pokemon.id);
     setIsInFavorites(!isInFavorites);
+
+    if (isInFavorites) return;
+    confetti({
+      zIndex:999,
+      particleCount: 100,
+      spread:160,
+      angle: -100,
+      origin: {
+        x:1,
+        y:0,
+      }
+    })
   };
 
   console.log({ ExistedWindow: typeof window }); //esto es bueno para saber s estamos corriendo codigo del lado del servidor o solo del lado del cliente
