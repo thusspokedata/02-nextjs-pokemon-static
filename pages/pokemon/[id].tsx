@@ -1,14 +1,15 @@
 import { useState } from 'react';
 
-import { Button, Card, Container, Grid, Text, Image } from '@nextui-org/react';
-import { NextPage, GetStaticPaths, GetStaticProps } from 'next';
+import { GetStaticProps, NextPage, GetStaticPaths } from 'next';
+import { Button, Card, Container, Grid, Image, Text } from '@nextui-org/react';
 
-import confetti from 'canvas-confetti'
+import confetti from 'canvas-confetti';
 
-import { pokeApi } from '../../api';
-import { Layout } from '../../components';
+
+import { Layout } from '../../components/layouts';
 import { Pokemon } from '../../interfaces';
 import { localFavorites } from '../../utils';
+import { getPokemonInfo } from '../../utils/getPokemonInfo';
 
 interface Props {
   pokemon: Pokemon;
@@ -36,7 +37,7 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
     })
   };
 
-  console.log({ ExistedWindow: typeof window }); //esto es bueno para saber s estamos corriendo codigo del lado del servidor o solo del lado del cliente
+  // console.log({ ExistedWindow: typeof window }); //esto es bueno para saber s estamos corriendo codigo del lado del servidor o solo del lado del cliente
 
   return (
     <Layout title={pokemon.name}>
@@ -84,7 +85,7 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
                   alt={pokemon.name}
                   width={100}
                   height={100}
-                />
+                />name
                 <Image
                   src={pokemon.sprites.back_default}
                   alt={pokemon.name}
@@ -126,11 +127,9 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params as { id: string };
 
-  const { data } = await pokeApi.get<Pokemon>(`/pokemon/${id}`);
-
   return {
     props: {
-      pokemon: data,
+      pokemon: await getPokemonInfo(id)
     },
   };
 };
